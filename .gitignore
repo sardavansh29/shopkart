@@ -1,0 +1,6 @@
+.env
+node_modules/
+seed.js
+.DS_Store
+*.log
+npm-debug.log*
