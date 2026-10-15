@@ -1,207 +1,100 @@
-# 🛒 ShopKart — Full Stack E-Commerce App
+ShopKart
+A full stack e-commerce app I built to learn how backend development works in practice. It has user auth, a product catalogue, cart, wishlist, and Razorpay payment integration.
 
-A full-stack e-commerce web application built with **React**, **Node.js**, **Express**, **MongoDB**, and **Razorpay** for payment processing.
+The backend is built with Node.js and Express, data is stored in MongoDB Atlas, and the frontend is React with Vite.
 
----
+Tech Stack
+Frontend — React 19, React Router v7, Vite
+Backend — Node.js, Express
+Database — MongoDB with Mongoose
+Auth — JWT stored in HTTP-only cookies
+Payments — Razorpay
+Password hashing — bcrypt
+Features
+Register and login with JWT auth
+Browse products, search by name, filter by category
+Add products to cart and manage quantities
+Wishlist functionality
+Checkout with Razorpay payment gateway
+Signature verification on the backend after payment
+Order history page
+Project Structure
 
-## 🚀 Live Features
 
-- 🔐 User Registration & Login (JWT via HTTP-only cookies)
-- 🛍️ Product catalogue with search & category filter
-- ❤️ Wishlist management
-- 🛒 Cart with quantity controls
-- 💳 Razorpay payment integration with signature verification
-- 📦 Order history and order details
-- 🔒 Protected routes with auth middleware
-
----
-
-## 🗂️ Project Structure
-
-```
-ShopKart Backend Project/
 ├── config/
-│   └── razorpay.js          # Razorpay SDK initialisation
 ├── controllers/
-│   ├── customer.controller.js
-│   ├── product.controller.js
-│   ├── cart.controller.js
-│   ├── wishlist.controller.js
-│   └── order.controller.js
 ├── middlewares/
-│   └── auth.middleware.js
 ├── models/
-│   ├── customer.model.js
-│   ├── product.model.js
-│   └── order.model.js
 ├── routes/
-│   ├── customer.routes.js
-│   ├── product.routes.js
-│   ├── cart.routes.js
-│   ├── wishlist.routes.js
-│   └── order.routes.js
-├── frontend/                # React + Vite frontend
+├── frontend/
 │   └── src/
-│       ├── pages/
 │       ├── components/
+│       ├── pages/
 │       ├── hooks/
 │       ├── context/
 │       └── services/
-├── index.js                 # Express server entry point
-└── .env.example             # Environment variable template
-```
+├── index.js
+└── .env.example
+Getting Started
+1. Clone the repo
+bash
 
----
 
-## ⚙️ Setup Instructions
-
-### Prerequisites
-
-- Node.js v18+
-- MongoDB Atlas account (or local MongoDB)
-- Razorpay account (for payments)
-
----
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/YOUR_USERNAME/shopkart.git
+git clone https://github.com/sardavansh29/shopkart.git
 cd shopkart
-```
+2. Setup environment variables
+Create a .env file in the root folder. You can use .env.example as a reference.
 
----
 
-### 2. Backend Setup
 
-```bash
-npm install
-```
-
-Create a `.env` file in the root directory:
-
-```env
 PORT=8007
 MongoDB_URI=your_mongodb_connection_string
-JWT_SECRET_KEY=your_jwt_secret_key
-RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxxxx
+JWT_SECRET_KEY=your_jwt_secret
+RAZORPAY_KEY_ID=your_razorpay_key_id
 RAZORPAY_KEY_SECRET=your_razorpay_key_secret
-```
+3. Install and run the backend
+bash
 
-Start the backend server:
 
-```bash
+npm install
 node index.js
-```
+4. Install and run the frontend
+bash
 
-You should see:
-```
-Server Started at port 8007
-DB connected
-```
 
----
-
-### 3. Frontend Setup
-
-```bash
 cd frontend
 npm install
 npm run dev
-```
+Frontend runs at http://localhost:5173. The Vite dev server is already configured to proxy API requests to the backend at port 8007, so you don't need to change anything.
 
-Open your browser at **http://localhost:5173**
+API Routes
+Customers
 
-> The Vite dev server proxies all API calls (`/customers`, `/products`, `/cart`, `/wishlist`, `/orders`) to `http://localhost:8007` automatically.
+POST /customers/register
+POST /customers/login
+GET /customers/me — requires auth
+POST /customers/logout
+Products
 
----
+GET /products — supports ?search= and ?category= query params
+GET /products/:id
+POST /products
+Cart — all require auth
 
-## 🔑 Environment Variables
+POST /cart/:productId
+GET /cart
+PATCH /cart/:productId
+DELETE /cart/:productId
+Wishlist — all require auth
 
-| Variable | Description |
-|----------|-------------|
-| `PORT` | Port for the Express server (default: 8007) |
-| `MongoDB_URI` | MongoDB connection string (Atlas or local) |
-| `JWT_SECRET_KEY` | Secret key for signing JWT tokens |
-| `RAZORPAY_KEY_ID` | Razorpay API Key ID (from dashboard) |
-| `RAZORPAY_KEY_SECRET` | Razorpay API Key Secret (from dashboard) |
+POST /wishlist/:productId
+GET /wishlist
+DELETE /wishlist/:productId
+Orders — all require auth
 
----
-
-## 📡 API Endpoints
-
-### Customer
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/customers/register` | ❌ | Register a new user |
-| POST | `/customers/login` | ❌ | Login and receive JWT cookie |
-| GET | `/customers/me` | ✅ | Get logged-in user profile |
-| POST | `/customers/logout` | ❌ | Logout and clear cookie |
-
-### Products
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/products` | ❌ | Create a product |
-| GET | `/products` | ❌ | Get all products (supports `?search=` & `?category=`) |
-| GET | `/products/:id` | ❌ | Get single product |
-
-### Cart
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/cart/:productId` | ✅ | Add item to cart |
-| GET | `/cart` | ✅ | View cart |
-| PATCH | `/cart/:productId` | ✅ | Update item quantity |
-| DELETE | `/cart/:productId` | ✅ | Remove item from cart |
-
-### Wishlist
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/wishlist/:productId` | ✅ | Add to wishlist |
-| GET | `/wishlist` | ✅ | View wishlist |
-| DELETE | `/wishlist/:productId` | ✅ | Remove from wishlist |
-
-### Orders
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/orders/create-payment-order` | ✅ | Create Razorpay order |
-| POST | `/orders/verify-payment` | ✅ | Verify payment signature |
-| GET | `/orders` | ✅ | Get all orders |
-| GET | `/orders/:id` | ✅ | Get single order |
-
----
-
-## 💳 Razorpay Test Payments
-
-Use these test credentials when Razorpay checkout opens:
-
-| Field | Value |
-|-------|-------|
-| Card Number | `4111 1111 1111 1111` |
-| Expiry | Any future date |
-| CVV | Any 3 digits |
-| OTP | `1234` |
-
----
-
-## 🛠️ Tech Stack
-
-| Layer | Technology |
-|-------|------------|
-| Frontend | React 19, React Router v7, Vite |
-| Backend | Node.js, Express 5 |
-| Database | MongoDB, Mongoose |
-| Auth | JWT (HTTP-only cookies) |
-| Payments | Razorpay |
-| Password | bcrypt |
-
----
-
-## 📸 Screenshots
-
-> Coming soon
-
----
-
-## 📄 License
-
-MIT
+POST /orders/create-payment-order
+POST /orders/verify-payment
+GET /orders
+GET /orders/:id
+Testing Payments
+Use Razorpay's test mode. When the payment popup opens, use card number 4111 1111 1111 1111 with any future expiry and CVV. OTP is 1234.
