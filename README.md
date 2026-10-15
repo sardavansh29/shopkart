@@ -1,4 +1,5 @@
-auth, product catalogue, cart, wishlist, and Razorpay payments.
+ShopKart
+A full stack e-commerce app built with Node.js, Express, MongoDB, and React. Has user auth, product catalogue, cart, wishlist, and Razorpay payments.
 
 Tech Stack
 Frontend — React 19, React Router, Vite
@@ -50,4 +51,11 @@ Razorpay keys are optional but checkout won't work without them.
 For testing payments use card number 4111 1111 1111 1111, any future expiry, any CVV, OTP is 1234.
 
 Frontend is configured to proxy all API calls to the backend on port 8007 so no extra config needed.
+
+9:40
+
+
+
+
+
 
